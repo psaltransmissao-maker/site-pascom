@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PASCOM - Santo Antônio de Lisboa</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .bg-paroquia { background-color: #FDFBF7; }
+        .marrom-paroquia { background-color: #5D4037; }
+    </style>
+</head>
+<body class="bg-paroquia text-stone-900 font-sans">
+
+    <header class="marrom-paroquia text-white p-6 shadow-md text-center">
+        <h1 class="text-2xl font-bold uppercase tracking-wide">Santo Antônio de Lisboa</h1>
+        <p class="text-amber-200 text-xs font-bold italic">GESTÃO DE MÍDIA PASTORAL</p>
+    </header>
+
+    <div class="max-w-4xl mx-auto p-6">
+        <div id="loading" class="text-center py-10">
+            <p class="text-stone-500 animate-pulse">Buscando postagens no banco de dados...</p>
+        </div>
+
+        <div id="lista-demandas" class="grid gap-6"></div>
+    </div>
+
+    <script>
+        // --- COLOQUE SEUS DADOS AQUI ---
+        const SB_URL = 'SUA_URL_DO_SUPABASE'; 
+        const SB_KEY = 'SUA_CHAVE_ANON_DO_SUPABASE';
+        // ------------------------------
+
+        const supabase = supabase.createClient(SB_URL, SB_KEY);
+
+        async function carregarDados() {
+            const { data, error } = await supabase
+                .from('postagens')
+                .select('*')
+                .order('criado_em', { ascending: false });
+
+            const listaElemento = document.getElementById('lista-demandas');
+            const loadingElemento = document.getElementById('loading');
+            
+            loadingElemento.style.display = 'none';
+
+            if (data && data.length > 0) {
+                listaElemento.innerHTML = data.map(item => `
+                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 ${item.status === 'Aprovado' ? 'border-green-500' : 'border-amber-500'}">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-[10px] font-bold uppercase px-2 py-1 rounded ${item.status === 'Aprovado' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}">${item.status}</span>
+                            <span class="text-xs text-stone-400 font-medium italic">Prazo: ${item.data_prazo}</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-stone-800">${item.titulo}</h3>
+                        <p class="text-stone-600 text-sm mt-1">${item.descricao || 'Sem descrição'}</p>
+                    </div>
+                `).join('');
+            } else {
+                listaElemento.innerHTML = '<p class="text-center text-stone-400 italic">Nenhuma postagem encontrada.</p>';
+            }
+        }
+
+        carregarDados();
+    </script>
+</body>
+</html>
