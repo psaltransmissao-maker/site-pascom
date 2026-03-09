@@ -19,71 +19,96 @@
     </header>
 
     <div class="max-w-4xl mx-auto p-6">
+        
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 mb-10">
+            <h2 class="text-lg font-bold mb-4 text-stone-700">Nova Demanda de Mídia</h2>
+            <div class="grid gap-4">
+                <input type="text" id="novo-titulo" placeholder="Título da Postagem (ex: Missa de Domingo)" class="p-3 border rounded-lg w-full outline-none focus:ring-2 focus:ring-amber-500">
+                <textarea id="nova-descricao" placeholder="Descrição ou detalhes da arte..." class="p-3 border rounded-lg w-full outline-none focus:ring-2 focus:ring-amber-500"></textarea>
+                <div class="flex gap-4">
+                    <input type="date" id="novo-prazo" class="p-3 border rounded-lg flex-1 outline-none">
+                    <button onclick="cadastrarPostagem()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-6 rounded-lg transition-all">
+                        Salvar Postagem
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <hr class="mb-10 border-stone-200">
+
+        <h2 class="text-xl font-bold mb-6 text-stone-800">Postagens Recentes</h2>
         <div id="loading" class="text-center py-10">
-            <p class="text-stone-500 animate-pulse">Buscando postagens no banco de dados...</p>
+            <p class="text-stone-500 animate-pulse">Conectando ao banco de dados...</p>
         </div>
 
         <div id="lista-demandas" class="grid gap-6"></div>
     </div>
 
     <script>
-        // --- CONFIGURAÇÕES DO SUPABASE ---
+        // --- CONFIGURAÇÕES ---
         const SB_URL = 'https://qasngjqoireicqwjcvgh.supabase.co'; 
         const SB_KEY = 'sb_publishable_pE-axaIPOEd0KCeoh3P6tg_4zbdwLq4';
-        
-        // CORREÇÃO: Alterado o nome da variável para 'supabaseClient' para não conflitar com a biblioteca
-        const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
+        // Inicialização com nome de variável diferente da biblioteca
+        const meuSupabase = supabase.createClient(SB_URL, SB_KEY);
+
+        // FUNÇÃO PARA CARREGAR DADOS
         async function carregarDados() {
-            const listaElemento = document.getElementById('lista-demandas');
-            const loadingElemento = document.getElementById('loading');
+            const lista = document.getElementById('lista-demandas');
+            const loading = document.getElementById('loading');
 
             try {
-                // Busca os dados da tabela 'postagens'
-                const { data, error } = await supabaseClient
+                const { data, error } = await meuSupabase
                     .from('postagens')
                     .select('*')
-                    .order('criado_em', { ascending: false });
+                    .order('created_at', { ascending: false });
 
-                // Se houver erro na consulta ao banco
                 if (error) throw error;
 
-                // Esconde o carregando
-                loadingElemento.style.display = 'none';
+                loading.style.display = 'none';
 
                 if (data && data.length > 0) {
-                    listaElemento.innerHTML = data.map(item => `
+                    lista.innerHTML = data.map(item => `
                         <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 ${item.status === 'Aprovado' ? 'border-green-500' : 'border-amber-500'}">
                             <div class="flex justify-between items-start mb-2">
-                                <span class="text-[10px] font-bold uppercase px-2 py-1 rounded ${item.status === 'Aprovado' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}">
-                                    ${item.status || 'Pendente'}
-                                </span>
-                                <span class="text-xs text-stone-400 font-medium italic">
-                                    Prazo: ${item.data_prazo || 'A definir'}
-                                </span>
+                                <span class="text-[10px] font-bold uppercase px-2 py-1 rounded ${item.status === 'Aprovado' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}">${item.status || 'Pendente'}</span>
+                                <span class="text-xs text-stone-400 font-medium italic">Prazo: ${item.data_prazo || 'A definir'}</span>
                             </div>
                             <h3 class="font-bold text-lg text-stone-800">${item.titulo}</h3>
-                            <p class="text-stone-600 text-sm mt-1">${item.descricao || 'Sem descrição disponível.'}</p>
+                            <p class="text-stone-600 text-sm mt-1">${item.descricao || 'Sem descrição'}</p>
                         </div>
                     `).join('');
                 } else {
-                    // Caso a tabela esteja vazia
-                    listaElemento.innerHTML = '<p class="text-center text-stone-400 italic">Nenhuma postagem encontrada no banco de dados.</p>';
+                    lista.innerHTML = '<p class="text-center text-stone-400 italic">Nenhum dado encontrado na tabela "postagens".</p>';
                 }
-
             } catch (err) {
-                // Mostra o erro na tela para facilitar o diagnóstico
-                console.error("Erro detalhado:", err);
-                loadingElemento.innerHTML = `
-                    <div class="bg-red-50 p-4 rounded-lg text-red-700 text-sm">
-                        <strong>Erro ao carregar dados:</strong><br>
-                        ${err.message}<br><br>
-                        <small>Verifique se o RLS (Políticas de Acesso) está ativo no Supabase.</small>
-                    </div>`;
+                loading.innerHTML = `<div class="bg-red-50 p-4 text-red-700 rounded-lg">Erro: ${err.message}</div>`;
+                console.error(err);
             }
         }
 
-        // Inicia a função ao carregar a página
+        // FUNÇÃO PARA CADASTRAR
+        async function cadastrarPostagem() {
+            const titulo = document.getElementById('novo-titulo').value;
+            const descricao = document.getElementById('nova-descricao').value;
+            const data_prazo = document.getElementById('novo-prazo').value;
+
+            if (!titulo) return alert("Por favor, digite um título!");
+
+            try {
+                const { error } = await meuSupabase
+                    .from('postagens')
+                    .insert([{ titulo, descricao, data_prazo, status: 'Pendente' }]);
+
+                if (error) throw error;
+
+                alert("Cadastrado com sucesso!");
+                location.reload(); // Recarrega para mostrar a nova postagem
+            } catch (err) {
+                alert("Erro ao salvar: " + err.message);
+            }
+        }
+
         carregarDados();
     </script>
 </body>
