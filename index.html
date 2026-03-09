@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PASCOM - Santo Antônio de Lisboa</title>
+    <title>PASCOM - Paróquia Santo Antônio de Lisboa</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -14,7 +14,7 @@
 <body class="bg-paroquia text-stone-900 font-sans">
 
     <header class="marrom-paroquia text-white p-6 shadow-md text-center">
-        <h1 class="text-2xl font-bold uppercase tracking-wide">Santo Antônio de Lisboa</h1>
+        <h1 class="text-2xl font-bold uppercase tracking-wide">Paróquia Santo Antônio de Lisboa</h1>
         <p class="text-amber-200 text-xs font-bold italic">GESTÃO DE MÍDIA PASTORAL</p>
     </header>
 
@@ -50,7 +50,7 @@
         const SB_KEY = 'sb_publishable_pE-axaIPOEd0KCeoh3P6tg_4zbdwLq4';
         const meuSupabase = supabase.createClient(SB_URL, SB_KEY);
 
-        // Formata data para o padrão Brasileiro
+        // Formata data para o padrão Brasileiro DD/MM/AAAA
         function formatarDataBR(dataEstrangeira) {
             if (!dataEstrangeira) return "A definir";
             const [ano, mes, dia] = dataEstrangeira.split('-');
@@ -86,7 +86,7 @@
                                         <button onclick="aprovarPostagem('${item.id}')" class="bg-green-600 hover:bg-green-700 text-white text-[10px] font-bold uppercase px-4 py-2 rounded shadow-sm transition-all">
                                             Aprovar
                                         </button>
-                                    ` : '<span class="text-green-600 text-[10px] font-bold uppercase italic">✓ Arte Finalizada</span>'}
+                                    ` : '<span class="text-green-600 text-[10px] font-bold uppercase italic font-black">✓ Arte Aprovada</span>'}
                                 </div>
                                 
                                 <button onclick="excluirPostagem('${item.id}', '${item.titulo}')" class="text-red-500 hover:bg-red-50 text-[10px] font-bold uppercase px-3 py-2 rounded border border-red-100 transition-all">
@@ -129,7 +129,7 @@
         }
 
         async function aprovarPostagem(id) {
-            if (!confirm("Confirmar a aprovação desta arte?")) return;
+            if (!confirm("Confirmar a aprovação desta arte para a Paróquia?")) return;
             try {
                 const { error } = await meuSupabase.from('postagens').update({ status: 'Aprovado' }).eq('id', id);
                 if (error) throw error;
@@ -137,23 +137,15 @@
             } catch (err) { alert("Erro ao aprovar: " + err.message); }
         }
 
-        // --- FUNÇÃO EXCLUIR COM AVISO ---
         async function excluirPostagem(id, titulo) {
-            // Mensagem de aviso personalizada
             const confirmacao = confirm(`⚠️ ATENÇÃO!\n\nVocê está prestes a apagar permanentemente a demanda: "${titulo}".\n\nEsta ação não pode ser desfeita. Deseja continuar?`);
 
             if (confirmacao) {
                 try {
-                    const { error } = await meuSupabase
-                        .from('postagens')
-                        .delete()
-                        .eq('id', id);
-
+                    const { error } = await meuSupabase.from('postagens').delete().eq('id', id);
                     if (error) throw error;
                     location.reload();
-                } catch (err) {
-                    alert("Erro ao excluir: " + err.message);
-                }
+                } catch (err) { alert("Erro ao excluir: " + err.message); }
             }
         }
 
