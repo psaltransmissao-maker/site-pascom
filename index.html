@@ -7,149 +7,222 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .bg-paroquia { background-color: #FDFBF7; }
-        .marrom-paroquia { background-color: #5D4037; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .marrom-psal { background-color: #5D4037; }
+        .card-form { background: #ffffff; border-radius: 20px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); }
+        .input-psal { background-color: #f1f5f9; border: 1px solid #e2e8f0; transition: all 0.3s; }
+        .input-psal:focus { border-color: #5D4037; background-color: #ffffff; ring: 2px; outline: none; border-color: transparent; box-shadow: 0 0 0 2px #5D4037; }
+        .aba-ativa { color: #5D4037; border-bottom: 3px solid #5D4037; font-weight: 700; }
     </style>
 </head>
-<body class="bg-paroquia text-stone-900 font-sans">
+<body class="text-slate-800">
 
-    <header class="marrom-paroquia text-white p-6 shadow-md text-center">
-        <h1 class="text-2xl font-bold uppercase tracking-wide">Paróquia Santo Antônio de Lisboa</h1>
-        <p class="text-amber-200 text-xs font-bold italic">GESTÃO DE MÍDIA PASTORAL</p>
+    <header class="marrom-psal text-white py-8 px-6 text-center shadow-lg">
+        <h1 class="text-2xl font-bold tracking-tight">Paróquia Santo Antônio de Lisboa</h1>
+        <p class="text-stone-300 text-xs mt-1 uppercase tracking-widest font-medium">Gestão de Mídia Pastoral</p>
     </header>
 
-    <div class="max-w-4xl mx-auto p-6">
+    <nav class="flex justify-center bg-white border-b border-slate-200 sticky top-0 z-50">
+        <button onclick="mudarAba('solicitante')" id="btn-solicitante" class="px-8 py-4 text-sm uppercase tracking-wider aba-ativa">Solicitante</button>
+        <button onclick="mudarAba('admin')" id="btn-admin" class="px-8 py-4 text-sm uppercase tracking-wider text-slate-400 font-medium">Equipe de Produção</button>
+    </nav>
+
+    <main class="max-w-2xl mx-auto p-6 md:p-10">
         
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 mb-10">
-            <h2 class="text-lg font-bold mb-4 text-stone-700">Nova Demanda de Mídia</h2>
-            <div class="grid gap-4">
-                <input type="text" id="novo-titulo" placeholder="Título da Postagem (ex: Missa de Domingo)" class="p-3 border rounded-lg w-full outline-none focus:ring-2 focus:ring-amber-500">
-                <textarea id="nova-descricao" placeholder="Descrição ou detalhes da arte..." class="p-3 border rounded-lg w-full outline-none focus:ring-2 focus:ring-amber-500"></textarea>
-                
-                <div class="grid gap-1">
-                    <label class="text-xs font-bold text-stone-500 uppercase ml-1">Data de Prazo de Conclusão</label>
-                    <div class="flex gap-4">
-                        <input type="date" id="novo-prazo" class="p-3 border rounded-lg flex-1 outline-none focus:ring-2 focus:ring-amber-500">
-                        <button onclick="cadastrarPostagem()" id="btn-salvar" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-6 rounded-lg transition-all">
-                            Salvar Postagem
-                        </button>
+        <div id="view-solicitante">
+            <div class="card-form p-8 md:p-10">
+                <div class="mb-8 border-b border-slate-100 pb-6">
+                    <h2 class="text-2xl font-bold text-slate-800">Solicitar Arte</h2>
+                    <p class="text-slate-500 mt-1">Preencha os dados abaixo para a PASCOM.</p>
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Sua Pastoral / Movimento / Comunidade</label>
+                        <select id="solicitante-nome" class="input-psal w-full p-4 rounded-xl outline-none cursor-pointer">
+                            <option value="">Selecione...</option>
+                            <option>Acólitos e Coroinhas</option>
+                            <option>Apostolado da Oração</option>
+                            <option>Campanha de Arrecadação de Alimentos</option>
+                            <option>Casa de Acolhimento Madre Tereza</option>
+                            <option>Com. Nossa Senhora de Fátima</option>
+                            <option>Com. São Domingos de Gusmão</option>
+                            <option>Com. São João Batista</option>
+                            <option>Com. São Mateus</option>
+                            <option>Coral</option>
+                            <option>Mesce</option>
+                            <option>Missão de Fátima</option>
+                            <option>Oficinas de Oração</option>
+                            <option>Paroquia Sto. Antônio de Lisboa - Matriz</option>
+                            <option>Pascom</option>
+                            <option>Pastoral Acolhida</option>
+                            <option>Pastoral Batismo</option>
+                            <option>Pastoral Canto Litúrgico</option>
+                            <option>Pastoral da Catequese</option>
+                            <option>Pastoral da Criança</option>
+                            <option>Pastoral da Saúde</option>
+                            <option>Pastoral da Sobriedade</option>
+                            <option>Pastoral do Dízimo</option>
+                            <option>Pastoral Familiar</option>
+                            <option>Pastoral Litúrgica</option>
+                            <option>RCC</option>
+                            <option>Setor da Juventude</option>
+                            <option>Terço dos Homens</option>
+                            <option>Vicentinos</option>
+                        </select>
                     </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Telefone de Contato (WhatsApp)</label>
+                        <input type="tel" id="solicitante-tel" placeholder="(00) 00000-0000" class="input-psal w-full p-4 rounded-xl outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Título do Evento ou Arte</label>
+                        <input type="text" id="novo-titulo" placeholder="Ex: Cartaz da Festa de Santo Antônio" class="input-psal w-full p-4 rounded-xl outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Detalhes e Informações (Texto da Arte)</label>
+                        <textarea id="nova-descricao" rows="4" placeholder="Descreva horários, local e informações importantes..." class="input-psal w-full p-4 rounded-xl outline-none"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Prazo de Entrega Desejado</label>
+                        <input type="date" id="novo-prazo" class="input-psal w-full p-4 rounded-xl outline-none">
+                    </div>
+
+                    <button onclick="cadastrarPostagem()" id="btn-salvar" class="marrom-psal w-full text-white font-bold py-5 rounded-2xl shadow-xl hover:opacity-90 transition-all transform active:scale-[0.98] mt-4 uppercase tracking-widest text-sm">
+                        Enviar para Produção
+                    </button>
                 </div>
             </div>
         </div>
 
-        <hr class="mb-10 border-stone-200">
+        <div id="view-admin" class="hidden">
+            <div id="login-admin" class="card-form p-10 text-center">
+                <div class="w-16 h-16 marrom-psal rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                </div>
+                <h2 class="text-xl font-bold mb-6">Acesso Equipe Pascom</h2>
+                <input type="password" id="senha-admin" placeholder="Senha" class="input-psal w-full p-4 rounded-xl text-center mb-4 outline-none">
+                <button onclick="autenticarAdmin()" class="marrom-psal w-full text-white font-bold py-4 rounded-xl uppercase text-xs tracking-widest">Entrar</button>
+            </div>
 
-        <h2 class="text-xl font-bold mb-6 text-stone-800">Postagens Recentes</h2>
-        <div id="loading" class="text-center py-10 text-stone-500">Conectando ao banco...</div>
-        <div id="lista-demandas" class="grid gap-6"></div>
-    </div>
+            <div id="conteudo-admin" class="hidden space-y-4">
+                <div class="flex justify-between items-center mb-6 px-2">
+                    <h2 class="font-bold text-lg text-slate-800">Painel de Demandas</h2>
+                    <span id="contador" class="bg-slate-200 text-slate-600 text-xs font-bold px-3 py-1 rounded-full">0</span>
+                </div>
+                <div id="lista-demandas" class="grid gap-4"></div>
+            </div>
+        </div>
+
+    </main>
 
     <script>
         const SB_URL = 'https://qasngjqoireicqwjcvgh.supabase.co'; 
         const SB_KEY = 'sb_publishable_pE-axaIPOEd0KCeoh3P6tg_4zbdwLq4';
         const meuSupabase = supabase.createClient(SB_URL, SB_KEY);
+        const SENHA_CORRETA = "psal2026"; 
 
-        // Formata data para o padrão Brasileiro DD/MM/AAAA
-        function formatarDataBR(dataEstrangeira) {
-            if (!dataEstrangeira) return "A definir";
-            const [ano, mes, dia] = dataEstrangeira.split('-');
-            return `${dia}/${mes}/${ano}`;
+        function mudarAba(aba) {
+            document.getElementById('view-solicitante').classList.toggle('hidden', aba === 'admin');
+            document.getElementById('view-admin').classList.toggle('hidden', aba === 'solicitante');
+            document.getElementById('btn-solicitante').classList.toggle('aba-ativa', aba === 'solicitante');
+            document.getElementById('btn-admin').classList.toggle('aba-ativa', aba === 'admin');
+        }
+
+        function autenticarAdmin() {
+            if (document.getElementById('senha-admin').value === SENHA_CORRETA) {
+                document.getElementById('login-admin').classList.add('hidden');
+                document.getElementById('conteudo-admin').classList.remove('hidden');
+                carregarDados();
+            } else { alert("Senha incorreta!"); }
         }
 
         async function carregarDados() {
             const lista = document.getElementById('lista-demandas');
-            const loading = document.getElementById('loading');
+            const { data, error } = await meuSupabase.from('postagens').select('*').order('created_at', { ascending: false });
+            if (data) {
+                document.getElementById('contador').innerText = data.length;
+                lista.innerHTML = data.map(item => {
+                    // Tenta extrair a pastoral e o telefone da descrição salva
+                    const parts = item.descricao.split(' | ');
+                    const pastoralInfo = parts[0] || 'N/A';
+                    const telInfo = parts[1] || 'N/A';
+                    const descReal = parts.slice(2).join(' | ') || item.descricao;
 
-            try {
-                const { data, error } = await meuSupabase
-                    .from('postagens')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-
-                if (error) throw error;
-                loading.style.display = 'none';
-
-                if (data && data.length > 0) {
-                    lista.innerHTML = data.map(item => `
-                        <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 ${item.status === 'Aprovado' ? 'border-green-500' : 'border-amber-500'}">
-                            <div class="flex justify-between items-start mb-2">
-                                <span class="text-[10px] font-bold uppercase px-2 py-1 rounded ${item.status === 'Aprovado' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}">${item.status || 'Pendente'}</span>
-                                <span class="text-xs text-stone-400 font-medium italic">Prazo: ${formatarDataBR(item.data_prazo)}</span>
+                    return `
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border-l-8 ${item.status === 'Aprovado' ? 'border-green-500' : 'border-amber-500'}">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <p class="text-[10px] font-black uppercase text-amber-600 tracking-tight">${pastoralInfo}</p>
+                                <h3 class="font-bold text-slate-800 leading-tight">${item.titulo}</h3>
+                                <p class="text-[9px] text-slate-400 font-bold mt-1">📞 CONTATO: ${telInfo}</p>
                             </div>
-                            <h3 class="font-bold text-lg text-stone-800">${item.titulo}</h3>
-                            <p class="text-stone-600 text-sm mt-1 mb-6">${item.descricao || 'Sem descrição'}</p>
-                            
-                            <div class="flex justify-between items-center border-t pt-4">
-                                <div>
-                                    ${item.status !== 'Aprovado' ? `
-                                        <button onclick="aprovarPostagem('${item.id}')" class="bg-green-600 hover:bg-green-700 text-white text-[10px] font-bold uppercase px-4 py-2 rounded shadow-sm transition-all">
-                                            Aprovar
-                                        </button>
-                                    ` : '<span class="text-green-600 text-[10px] font-bold uppercase italic font-black">✓ Arte Aprovada</span>'}
-                                </div>
-                                
-                                <button onclick="excluirPostagem('${item.id}', '${item.titulo}')" class="text-red-500 hover:bg-red-50 text-[10px] font-bold uppercase px-3 py-2 rounded border border-red-100 transition-all">
-                                    Excluir Registro
-                                </button>
+                            <span class="text-[9px] bg-slate-100 px-2 py-1 rounded font-bold uppercase">${item.status}</span>
+                        </div>
+                        <p class="text-slate-500 text-xs mb-4 mt-2">${descReal}</p>
+                        <div class="flex justify-between items-center pt-4 border-t border-slate-50">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">PRAZO: ${item.data_pra_zo ? item.data_prazo.split('-').reverse().join('/') : 'A definir'}</span>
+                            <div class="flex gap-4">
+                                ${item.status !== 'Aprovado' ? `<button onclick="status('${item.id}', 'Aprovado')" class="text-green-600 font-bold text-[10px] uppercase">Aprovar</button>` : ''}
+                                <button onclick="deletar('${item.id}')" class="text-red-400 font-bold text-[10px] uppercase">Excluir</button>
                             </div>
                         </div>
-                    `).join('');
-                } else {
-                    lista.innerHTML = '<p class="text-center text-stone-400 italic">Nenhuma postagem encontrada.</p>';
-                }
-            } catch (err) {
-                loading.innerHTML = `<div class="text-red-500">Erro: ${err.message}</div>`;
+                    </div>
+                `}).join('');
             }
         }
 
         async function cadastrarPostagem() {
             const btn = document.getElementById('btn-salvar');
-            const titulo = document.getElementById('novo-titulo').value;
-            const descricao = document.getElementById('nova-descricao').value;
-            const data_prazo = document.getElementById('novo-prazo').value;
+            const t = document.getElementById('novo-titulo').value;
+            const d = document.getElementById('nova-descricao').value;
+            const p = document.getElementById('novo-prazo').value;
+            const s = document.getElementById('solicitante-nome').value;
+            const tel = document.getElementById('solicitante-tel').value;
 
-            if (!titulo) return alert("Por favor, digite um título!");
-
+            if (!t || !s) return alert("Por favor, selecione a Pastoral e digite um Título!");
+            
+            btn.innerText = "ENVIANDO SOLICITAÇÃO...";
             btn.disabled = true;
-            btn.innerText = "Salvando...";
 
-            try {
-                const { error } = await meuSupabase
-                    .from('postagens')
-                    .insert([{ titulo, descricao, data_prazo, status: 'Pendente' }]);
+            // Salvamos a pastoral e o telefone dentro do campo descrição para não precisar mudar a tabela no Supabase
+            const descricaoCompleta = `${s.toUpperCase()} | ${tel} | ${d}`;
 
-                if (error) throw error;
-                location.reload();
-            } catch (err) {
-                alert("Erro ao salvar: " + err.message);
+            const { error } = await meuSupabase.from('postagens').insert([{ 
+                titulo: t, 
+                descricao: descricaoCompleta, 
+                data_prazo: p, 
+                status: 'Pendente' 
+            }]);
+
+            if (error) {
+                alert("Erro: " + error.message);
                 btn.disabled = false;
-                btn.innerText = "Salvar Postagem";
-            }
-        }
-
-        async function aprovarPostagem(id) {
-            if (!confirm("Confirmar a aprovação desta arte para a Paróquia?")) return;
-            try {
-                const { error } = await meuSupabase.from('postagens').update({ status: 'Aprovado' }).eq('id', id);
-                if (error) throw error;
+                btn.innerText = "ENVIAR PARA PRODUÇÃO";
+            } else {
+                alert("Solicitação enviada com sucesso para a PASCOM!");
                 location.reload();
-            } catch (err) { alert("Erro ao aprovar: " + err.message); }
-        }
-
-        async function excluirPostagem(id, titulo) {
-            const confirmacao = confirm(`⚠️ ATENÇÃO!\n\nVocê está prestes a apagar permanentemente a demanda: "${titulo}".\n\nEsta ação não pode ser desfeita. Deseja continuar?`);
-
-            if (confirmacao) {
-                try {
-                    const { error } = await meuSupabase.from('postagens').delete().eq('id', id);
-                    if (error) throw error;
-                    location.reload();
-                } catch (err) { alert("Erro ao excluir: " + err.message); }
             }
         }
 
-        carregarDados();
+        async function status(id, novo) {
+            await meuSupabase.from('postagens').update({ status: novo }).eq('id', id);
+            carregarDados();
+        }
+
+        async function deletar(id) {
+            if(confirm("Deseja apagar este registro?")) {
+                await meuSupabase.from('postagens').delete().eq('id', id);
+                carregarDados();
+            }
+        }
     </script>
 </body>
 </html>
