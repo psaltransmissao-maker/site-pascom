@@ -12,7 +12,7 @@
         .marrom-psal { background-color: #5D4037; }
         .card-form { background: #ffffff; border-radius: 20px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); }
         .input-psal { background-color: #f1f5f9; border: 1px solid #e2e8f0; transition: all 0.3s; }
-        .input-psal:focus { border-color: #5D4037; background-color: #ffffff; ring: 2px; outline: none; border-color: transparent; box-shadow: 0 0 0 2px #5D4037; }
+        .input-psal:focus { border-color: #5D4037; background-color: #ffffff; ring: 2px; outline: none; box-shadow: 0 0 0 2px #5D4037; }
         .aba-ativa { color: #5D4037; border-bottom: 3px solid #5D4037; font-weight: 700; }
     </style>
 </head>
@@ -34,7 +34,7 @@
             <div class="card-form p-8 md:p-10">
                 <div class="mb-8 border-b border-slate-100 pb-6">
                     <h2 class="text-2xl font-bold text-slate-800">Solicitar Arte</h2>
-                    <p class="text-slate-500 mt-1">Preencha os dados abaixo para a PASCOM.</p>
+                    <p class="text-slate-500 mt-1">Selecione o tipo de demanda e preencha as informações.</p>
                 </div>
 
                 <div class="space-y-6">
@@ -74,22 +74,28 @@
                     </div>
 
                     <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Tipo de Solicitação</label>
+                        <select id="novo-titulo" class="input-psal w-full p-4 rounded-xl outline-none cursor-pointer">
+                            <option value="">Selecione...</option>
+                            <option>Aviso para comunicados</option>
+                            <option>Criação de arte para divulgação</option>
+                            <option>Evento a ser divulgado</option>
+                            <option>Outros</option>
+                        </select>
+                    </div>
+
+                    <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">Telefone de Contato (WhatsApp)</label>
                         <input type="tel" id="solicitante-tel" placeholder="(00) 00000-0000" class="input-psal w-full p-4 rounded-xl outline-none">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Título do Evento ou Arte</label>
-                        <input type="text" id="novo-titulo" placeholder="Ex: Cartaz da Festa de Santo Antônio" class="input-psal w-full p-4 rounded-xl outline-none">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Descrição e Texto da Arte</label>
+                        <textarea id="nova-descricao" rows="4" placeholder="Descreva os detalhes importantes..." class="input-psal w-full p-4 rounded-xl outline-none"></textarea>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Detalhes e Informações (Texto da Arte)</label>
-                        <textarea id="nova-descricao" rows="4" placeholder="Descreva horários, local e informações importantes..." class="input-psal w-full p-4 rounded-xl outline-none"></textarea>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Prazo de Entrega Desejado</label>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Data de Prazo de Conclusão</label>
                         <input type="date" id="novo-prazo" class="input-psal w-full p-4 rounded-xl outline-none">
                     </div>
 
@@ -120,7 +126,6 @@
                 <div id="lista-demandas" class="grid gap-4"></div>
             </div>
         </div>
-
     </main>
 
     <script>
@@ -150,7 +155,6 @@
             if (data) {
                 document.getElementById('contador').innerText = data.length;
                 lista.innerHTML = data.map(item => {
-                    // Tenta extrair a pastoral e o telefone da descrição salva
                     const parts = item.descricao.split(' | ');
                     const pastoralInfo = parts[0] || 'N/A';
                     const telInfo = parts[1] || 'N/A';
@@ -168,10 +172,10 @@
                         </div>
                         <p class="text-slate-500 text-xs mb-4 mt-2">${descReal}</p>
                         <div class="flex justify-between items-center pt-4 border-t border-slate-50">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">PRAZO: ${item.data_pra_zo ? item.data_prazo.split('-').reverse().join('/') : 'A definir'}</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">PRAZO: ${item.data_prazo ? item.data_prazo.split('-').reverse().join('/') : 'A definir'}</span>
                             <div class="flex gap-4">
-                                ${item.status !== 'Aprovado' ? `<button onclick="status('${item.id}', 'Aprovado')" class="text-green-600 font-bold text-[10px] uppercase">Aprovar</button>` : ''}
-                                <button onclick="deletar('${item.id}')" class="text-red-400 font-bold text-[10px] uppercase">Excluir</button>
+                                ${item.status !== 'Aprovado' ? `<button onclick="status('${item.id}', 'Aprovado')" class="text-green-600 font-bold text-[10px] uppercase hover:underline">Aprovar</button>` : ''}
+                                <button onclick="deletar('${item.id}')" class="text-red-400 font-bold text-[10px] uppercase hover:underline">Excluir</button>
                             </div>
                         </div>
                     </div>
@@ -187,12 +191,11 @@
             const s = document.getElementById('solicitante-nome').value;
             const tel = document.getElementById('solicitante-tel').value;
 
-            if (!t || !s) return alert("Por favor, selecione a Pastoral e digite um Título!");
+            if (!t || !s) return alert("Por favor, preencha todos os campos obrigatórios!");
             
             btn.innerText = "ENVIANDO SOLICITAÇÃO...";
             btn.disabled = true;
 
-            // Salvamos a pastoral e o telefone dentro do campo descrição para não precisar mudar a tabela no Supabase
             const descricaoCompleta = `${s.toUpperCase()} | ${tel} | ${d}`;
 
             const { error } = await meuSupabase.from('postagens').insert([{ 
@@ -207,7 +210,7 @@
                 btn.disabled = false;
                 btn.innerText = "ENVIAR PARA PRODUÇÃO";
             } else {
-                alert("Solicitação enviada com sucesso para a PASCOM!");
+                alert("Solicitação enviada com sucesso!");
                 location.reload();
             }
         }
