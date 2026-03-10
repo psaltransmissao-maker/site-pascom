@@ -34,10 +34,10 @@
             <div class="card-form p-8 md:p-10">
                 <div class="mb-8 border-b border-slate-100 pb-6">
                     <h2 class="text-2xl font-bold text-slate-800">Solicitar Arte</h2>
-                    <p class="text-slate-500 mt-1">Preencha os dados abaixo para a equipe de mídia.</p>
+                    <p class="text-slate-500 mt-1">Preencha os dados e anexe seu arquivo de referência.</p>
                 </div>
 
-                <div class="space-y-6">
+                <div class="space-y-5">
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">Pastoral / Comunidade</label>
                         <select id="sol-pastoral" class="input-psal w-full p-4 rounded-xl outline-none">
@@ -47,18 +47,12 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">Seu Nome</label>
-                            <input type="text" id="sol-nome" placeholder="Responsável" class="input-psal w-full p-4 rounded-xl outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">WhatsApp</label>
-                            <input type="tel" id="sol-tel" placeholder="(00) 00000-0000" class="input-psal w-full p-4 rounded-xl outline-none">
-                        </div>
+                        <input type="text" id="sol-nome" placeholder="Seu Nome" class="input-psal w-full p-4 rounded-xl outline-none">
+                        <input type="tel" id="sol-tel" placeholder="WhatsApp (00) 00000-0000" class="input-psal w-full p-4 rounded-xl outline-none">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Título do evento / aviso / arte</label>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Título (Tipo de Solicitação)</label>
                         <select id="sol-tipo" class="input-psal w-full p-4 rounded-xl outline-none">
                             <option value="">Selecione...</option>
                             <option>Aviso para comunicados</option>
@@ -68,23 +62,21 @@
                         </select>
                     </div>
 
+                    <textarea id="sol-desc" rows="4" placeholder="Descrição detalhada (Local, mensagens, horários...)" class="input-psal w-full p-4 rounded-xl outline-none"></textarea>
+
+                    <div class="p-4 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50">
+                        <label class="block text-sm font-bold text-slate-700 mb-1">Anexar Referência (Imagem ou PDF)</label>
+                        <p class="text-[10px] text-slate-400 mb-3 italic">Opcional: Envie uma imagem de exemplo</p>
+                        <input type="file" id="sol-arquivo" accept="image/*,application/pdf" class="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-stone-200 file:text-stone-700 hover:file:bg-stone-300">
+                    </div>
+
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">Data desejada para divulgação</label>
                         <input type="date" id="sol-prazo" class="input-psal w-full p-4 rounded-xl outline-none">
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Descrição detalhada do pedido*</label>
-                        <textarea id="sol-desc" rows="4" placeholder="Local, horários, mensagens importantes..." class="input-psal w-full p-4 rounded-xl outline-none"></textarea>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Link opcional (Inscrição, Etc)</label>
-                        <input type="text" id="sol-link" placeholder="Cole o link aqui" class="input-psal w-full p-4 rounded-xl outline-none">
-                    </div>
-
-                    <button onclick="enviarPedido()" id="btn-salvar" class="marrom-psal w-full text-white font-bold py-5 rounded-2xl shadow-xl hover:opacity-90 transition-all uppercase tracking-widest text-sm">
-                        Enviar Solicitação
+                    <button onclick="enviarPedido()" id="btn-salvar" class="marrom-psal w-full text-white font-bold py-5 rounded-2xl shadow-xl hover:opacity-90 transition-all uppercase text-sm">
+                        Enviar para Equipe de Mídia
                     </button>
                 </div>
             </div>
@@ -92,15 +84,15 @@
 
         <div id="view-admin" class="hidden">
             <div id="login-admin" class="card-form p-10 text-center">
-                <h2 class="text-xl font-bold mb-6">Painel Administrativo</h2>
+                <h2 class="text-xl font-bold mb-6 text-slate-800">Painel Equipe Pascom</h2>
                 <input type="password" id="senha-admin" placeholder="Senha" class="input-psal w-full p-4 rounded-xl text-center mb-4 outline-none">
                 <button onclick="autenticarAdmin()" class="marrom-psal w-full text-white font-bold py-4 rounded-xl uppercase text-xs tracking-widest">Entrar</button>
             </div>
 
             <div id="conteudo-admin" class="hidden space-y-4">
-                <div class="flex justify-between items-center mb-4 px-2">
-                    <h2 class="font-bold text-lg">Pedidos na Fila</h2>
-                    <button onclick="carregarDados()" class="text-[10px] uppercase font-black text-stone-400">Atualizar ↻</button>
+                <div class="flex justify-between items-center mb-6 px-2">
+                    <h2 class="font-bold text-lg text-slate-800">Fila de Demandas</h2>
+                    <button onclick="carregarDados()" class="text-xs font-bold text-slate-400 uppercase">Atualizar ↻</button>
                 </div>
                 <div id="lista-demandas" class="grid gap-4"></div>
             </div>
@@ -134,38 +126,35 @@
             if (data) {
                 lista.innerHTML = data.map(item => {
                     const p = item.descricao.split(' | ');
-                    // Pastoral [0], Nome [1], Tel [2], Desc [3], Link Pedido [4], Link Arte Final [5]
+                    const fileUrl = p[4] ? `${SB_URL}/storage/v1/object/public/referencias/${p[4]}` : null;
+
                     return `
                     <div class="bg-white p-6 rounded-2xl shadow-sm border-l-8 ${item.status === 'Aprovado' ? 'border-green-500' : 'border-amber-500'}">
                         <div class="flex justify-between items-start mb-2">
                             <div>
-                                <p class="text-[10px] font-bold text-amber-600 uppercase">${p[0] || 'PASTORAL'}</p>
+                                <p class="text-[10px] font-bold text-amber-600 uppercase">${p[0]}</p>
                                 <h3 class="font-bold text-slate-800">${item.titulo}</h3>
-                                <p class="text-[10px] text-slate-500">Por: <b>${p[1] || 'N/A'}</b></p>
+                                <p class="text-[10px] text-slate-500">Solicitante: <b>${p[1]}</b></p>
                             </div>
                             <span class="text-[9px] bg-slate-100 px-2 py-1 rounded font-bold uppercase">${item.status}</span>
                         </div>
-                        <p class="text-xs text-slate-600 bg-slate-50 p-3 rounded-lg my-3 border border-slate-100">${p[3] || item.descricao}</p>
+                        <p class="text-xs text-slate-600 bg-slate-50 p-3 rounded-lg my-3 border border-slate-100">${p[2]}</p>
                         
+                        ${fileUrl ? `<div class="mb-4 p-2 bg-blue-50 rounded-lg flex justify-between items-center"><span class="text-[10px] font-bold text-blue-700">📄 REFERÊNCIA ANEXADA</span><a href="${fileUrl}" target="_blank" class="bg-blue-600 text-white px-3 py-1 rounded text-[9px] uppercase">Ver Arquivo</a></div>` : ''}
+
                         ${item.status !== 'Aprovado' ? `
-                            <div class="mt-4 p-3 bg-stone-50 rounded-xl border border-dashed border-stone-200">
-                                <label class="text-[9px] font-black uppercase text-stone-400 block mb-1">Link da Arte Finalizada (Canva/Drive):</label>
+                            <div class="mt-4 p-3 bg-stone-50 rounded-xl border border-stone-200">
+                                <label class="text-[9px] font-black uppercase text-stone-400 block mb-1">Link da Arte Pronta (Canva/Drive):</label>
                                 <div class="flex gap-2">
-                                    <input type="text" id="link-final-${item.id}" placeholder="Cole o link da arte aqui..." class="flex-1 p-2 text-xs border rounded-lg outline-none focus:ring-1 focus:ring-green-500">
-                                    <button onclick="finalizar('${item.id}', '${p[1]}', '${p[2]}', '${item.titulo}')" class="bg-green-600 text-white font-bold text-[10px] px-4 py-2 rounded-lg uppercase">
-                                        Enviar Zap
-                                    </button>
+                                    <input type="text" id="link-final-${item.id}" placeholder="Cole o link aqui..." class="flex-1 p-2 text-xs border rounded-lg outline-none">
+                                    <button onclick="finalizar('${item.id}', '${p[1]}', '${p[3]}', '${item.titulo}', '${p[4]}')" class="bg-green-600 text-white font-bold text-[10px] px-4 py-2 rounded-lg uppercase">Finalizar</button>
                                 </div>
                             </div>
-                        ` : `
-                            <div class="mt-2 p-2 bg-green-50 rounded-lg text-[10px] text-green-700 truncate">
-                                <b>Arte Final:</b> <a href="${p[5]}" target="_blank" class="underline">${p[5] || 'Sem link'}</a>
-                            </div>
-                        `}
+                        ` : ''}
 
-                        <div class="flex justify-between items-center pt-4 border-t border-slate-50 mt-4">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">DATA: ${item.data_prazo ? item.data_prazo.split('-').reverse().join('/') : '--'}</span>
-                            <button onclick="deletar('${item.id}')" class="text-red-300 hover:text-red-500 font-bold text-[9px] uppercase transition-colors">Excluir Pedido</button>
+                        <div class="flex justify-between items-center mt-4">
+                            <span class="text-[10px] font-bold text-slate-400">PRAZO: ${item.data_prazo ? item.data_prazo.split('-').reverse().join('/') : '--'}</span>
+                            <button onclick="deletar('${item.id}', '${p[4]}')" class="text-red-300 font-bold text-[9px] uppercase">Excluir</button>
                         </div>
                     </div>
                 `}).join('');
@@ -174,48 +163,49 @@
 
         async function enviarPedido() {
             const btn = document.getElementById('btn-salvar');
-            const past = document.getElementById('sol-pastoral').value;
-            const nome = document.getElementById('sol-nome').value;
-            const tel = document.getElementById('sol-tel').value;
-            const tipo = document.getElementById('sol-tipo').value;
-            const desc = document.getElementById('sol-desc').value;
-            const link = document.getElementById('sol-link').value;
-            const dataP = document.getElementById('sol-prazo').value;
+            const fileInput = document.getElementById('sol-arquivo');
+            const file = fileInput.files[0];
+            let fileName = "";
 
-            if (!past || !nome || !tel || !tipo) return alert("Preencha Pastoral, Nome, WhatsApp e Título!");
+            if (!document.getElementById('sol-pastoral').value || !document.getElementById('sol-nome').value) return alert("Preencha a Pastoral e seu Nome!");
 
-            btn.innerText = "ENVIANDO..."; btn.disabled = true;
+            btn.innerText = "ENVIANDO AGUARDE..."; btn.disabled = true;
 
-            const descricaoFinal = `${past.toUpperCase()} | ${nome} | ${tel.replace(/\D/g,'')} | ${desc} | ${link} | `;
+            if (file) {
+                fileName = `${Date.now()}-${file.name}`;
+                await meuSupabase.storage.from('referencias').upload(fileName, file);
+            }
 
-            const { error } = await meuSupabase.from('postagens').insert([{ titulo: tipo, descricao: descricaoFinal, data_prazo: dataP, status: 'Pendente' }]);
+            const descFinal = `${document.getElementById('sol-pastoral').value} | ${document.getElementById('sol-nome').value} | ${document.getElementById('sol-desc').value} | ${document.getElementById('sol-tel').value.replace(/\D/g,'')} | ${fileName}`;
 
-            if (error) { alert("Erro: " + error.message); btn.disabled = false; }
+            const { error } = await meuSupabase.from('postagens').insert([{ titulo: document.getElementById('sol-tipo').value, descricao: descFinal, status: 'Pendente', data_prazo: document.getElementById('sol-prazo').value }]);
+
+            if (error) { alert(error.message); btn.disabled = false; }
             else { alert("Solicitação enviada com sucesso!"); location.reload(); }
         }
 
-        async function finalizar(id, nome, tel, titulo) {
+        async function finalizar(id, nome, tel, titulo, fileName) {
             const linkArte = document.getElementById(`link-final-${id}`).value;
-            if (!linkArte) return alert("Por favor, cole o link da arte finalizada para enviar!");
+            if (!linkArte) return alert("Insira o link da arte finalizada!");
             
-            if (!confirm("Confirmar conclusão e aviso no WhatsApp?")) return;
-            
-            // Buscar descrição atual para anexar o link da arte no final
-            const { data } = await meuSupabase.from('postagens').select('descricao').eq('id', id).single();
-            const partes = data.descricao.split(' | ');
-            partes[5] = linkArte; // Atualiza o campo de link da arte
-            const novaDescricao = partes.join(' | ');
+            // 1. WhatsApp
+            const msg = window.encodeURIComponent(`Olá ${nome}! 🙏 Aqui é da PASCOM. Sua arte para "${titulo}" está pronta! Acesse aqui: ${linkArte}`);
+            window.open(`https://wa.me/55${tel}?text=${msg}`, '_blank');
 
-            await meuSupabase.from('postagens').update({ status: 'Aprovado', descricao: novaDescricao }).eq('id', id);
-            
-            if (tel && tel !== 'undefined') {
-                const msg = window.encodeURIComponent(`Olá ${nome}! 🙏 Aqui é da PASCOM (Paróquia Santo Antônio de Lisboa). Passando para avisar que a sua arte para "${titulo}" está pronta!\n\nVocê pode acessar pelo link abaixo:\n${linkArte}`);
-                window.open(`https://wa.me/55${tel}?text=${msg}`, '_blank');
-            }
+            // 2. Apagar arquivo do Storage
+            if (fileName && fileName !== "undefined") await meuSupabase.storage.from('referencias').remove([fileName]);
+
+            // 3. Status
+            await meuSupabase.from('postagens').update({ status: 'Aprovado' }).eq('id', id);
             carregarDados();
         }
 
-        async function deletar(id) { if(confirm("Apagar permanentemente este pedido?")) { await meuSupabase.from('postagens').delete().eq('id', id); carregarDados(); } }
+        async function deletar(id, fileName) {
+            if(!confirm("Excluir este pedido?")) return;
+            if (fileName && fileName !== "undefined") await meuSupabase.storage.from('referencias').remove([fileName]);
+            await meuSupabase.from('postagens').delete().eq('id', id);
+            carregarDados();
+        }
     </script>
 </body>
 </html>
