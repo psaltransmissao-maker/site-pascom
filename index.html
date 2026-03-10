@@ -34,58 +34,32 @@
             <div class="card-form p-8 md:p-10">
                 <div class="mb-8 border-b border-slate-100 pb-6">
                     <h2 class="text-2xl font-bold text-slate-800">Solicitar Arte</h2>
-                    <p class="text-slate-500 mt-1">Preencha os dados abaixo para enviar sua demanda.</p>
+                    <p class="text-slate-500 mt-1">Preencha os dados abaixo para a equipe de mídia.</p>
                 </div>
 
                 <div class="space-y-6">
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Sua Pastoral / Movimento / Comunidade</label>
-                        <select id="solicitante-pastoral" class="input-psal w-full p-4 rounded-xl outline-none cursor-pointer">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Pastoral / Comunidade</label>
+                        <select id="sol-pastoral" class="input-psal w-full p-4 rounded-xl outline-none">
                             <option value="">Selecione...</option>
-                            <option>Acólitos e Coroinhas</option>
-                            <option>Apostolado da Oração</option>
-                            <option>Campanha de Arrecadação de Alimentos</option>
-                            <option>Casa de Acolhimento Madre Tereza</option>
-                            <option>Com. Nossa Senhora de Fátima</option>
-                            <option>Com. São Domingos de Gusmão</option>
-                            <option>Com. São João Batista</option>
-                            <option>Com. São Mateus</option>
-                            <option>Coral</option>
-                            <option>Mesce</option>
-                            <option>Missão de Fátima</option>
-                            <option>Oficinas de Oração</option>
-                            <option>Paroquia Sto. Antônio de Lisboa - Matriz</option>
-                            <option>Pascom</option>
-                            <option>Pastoral Acolhida</option>
-                            <option>Pastoral Batismo</option>
-                            <option>Pastoral Canto Litúrgico</option>
-                            <option>Pastoral da Catequese</option>
-                            <option>Pastoral da Criança</option>
-                            <option>Pastoral da Saúde</option>
-                            <option>Pastoral da Sobriedade</option>
-                            <option>Pastoral do Dízimo</option>
-                            <option>Pastoral Familiar</option>
-                            <option>Pastoral Litúrgica</option>
-                            <option>RCC</option>
-                            <option>Setor da Juventude</option>
-                            <option>Terço dos Homens</option>
-                            <option>Vicentinos</option>
+                            <option>Acólitos e Coroinhas</option><option>Apostolado da Oração</option><option>Campanha de Arrecadação de Alimentos</option><option>Casa de Acolhimento Madre Tereza</option><option>Com. Nossa Senhora de Fátima</option><option>Com. São Domingos de Gusmão</option><option>Com. São João Batista</option><option>Com. São Mateus</option><option>Coral</option><option>Mesce</option><option>Missão de Fátima</option><option>Oficinas de Oração</option><option>Paroquia Sto. Antônio de Lisboa - Matriz</option><option>Pascom</option><option>Pastoral Acolhida</option><option>Pastoral Batismo</option><option>Pastoral Canto Litúrgico</option><option>Pastoral da Catequese</option><option>Pastoral da Criança</option><option>Pastoral da Saúde</option><option>Pastoral da Sobriedade</option><option>Pastoral do Dízimo</option><option>Pastoral Familiar</option><option>Pastoral Litúrgica</option><option>RCC</option><option>Setor da Juventude</option><option>Terço dos Homens</option><option>Vicentinos</option>
                         </select>
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Nome do Responsável pelo Pedido</label>
-                        <input type="text" id="solicitante-nome" placeholder="Seu nome completo" class="input-psal w-full p-4 rounded-xl outline-none">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Seu Nome</label>
+                            <input type="text" id="sol-nome" placeholder="Responsável" class="input-psal w-full p-4 rounded-xl outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">WhatsApp</label>
+                            <input type="tel" id="sol-tel" placeholder="(00) 00000-0000" class="input-psal w-full p-4 rounded-xl outline-none">
+                        </div>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Telefone de Contato (WhatsApp)</label>
-                        <input type="tel" id="solicitante-tel" placeholder="(00) 00000-0000" class="input-psal w-full p-4 rounded-xl outline-none">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Tipo de Solicitação</label>
-                        <select id="novo-titulo" class="input-psal w-full p-4 rounded-xl outline-none cursor-pointer">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Título do evento / aviso / arte</label>
+                        <select id="sol-tipo" class="input-psal w-full p-4 rounded-xl outline-none">
                             <option value="">Selecione...</option>
                             <option>Aviso para comunicados</option>
                             <option>Criação de arte para divulgação</option>
@@ -95,17 +69,22 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Descrição e Texto da Arte</label>
-                        <textarea id="nova-descricao" rows="4" placeholder="Descreva os detalhes importantes que devem conter na arte..." class="input-psal w-full p-4 rounded-xl outline-none"></textarea>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Data desejada para divulgação</label>
+                        <input type="date" id="sol-prazo" class="input-psal w-full p-4 rounded-xl outline-none">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Data de Prazo de Conclusão</label>
-                        <input type="date" id="novo-prazo" class="input-psal w-full p-4 rounded-xl outline-none">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Descrição detalhada do pedido*</label>
+                        <textarea id="sol-desc" rows="4" placeholder="Local, horários, mensagens importantes..." class="input-psal w-full p-4 rounded-xl outline-none"></textarea>
                     </div>
 
-                    <button onclick="cadastrarPostagem()" id="btn-salvar" class="marrom-psal w-full text-white font-bold py-5 rounded-2xl shadow-xl hover:opacity-90 transition-all transform active:scale-[0.98] mt-4 uppercase tracking-widest text-sm">
-                        Enviar para Produção
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Link opcional (Inscrição, Etc)</label>
+                        <input type="text" id="sol-link" placeholder="Cole o link aqui" class="input-psal w-full p-4 rounded-xl outline-none">
+                    </div>
+
+                    <button onclick="enviarPedido()" id="btn-salvar" class="marrom-psal w-full text-white font-bold py-5 rounded-2xl shadow-xl hover:opacity-90 transition-all uppercase tracking-widest text-sm">
+                        Enviar Solicitação
                     </button>
                 </div>
             </div>
@@ -113,20 +92,15 @@
 
         <div id="view-admin" class="hidden">
             <div id="login-admin" class="card-form p-10 text-center">
-                <div class="w-16 h-16 marrom-psal rounded-full flex items-center justify-center mx-auto mb-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                </div>
-                <h2 class="text-xl font-bold mb-6">Acesso Equipe Pascom</h2>
+                <h2 class="text-xl font-bold mb-6">Painel Administrativo</h2>
                 <input type="password" id="senha-admin" placeholder="Senha" class="input-psal w-full p-4 rounded-xl text-center mb-4 outline-none">
                 <button onclick="autenticarAdmin()" class="marrom-psal w-full text-white font-bold py-4 rounded-xl uppercase text-xs tracking-widest">Entrar</button>
             </div>
 
             <div id="conteudo-admin" class="hidden space-y-4">
-                <div class="flex justify-between items-center mb-6 px-2">
-                    <h2 class="font-bold text-lg text-slate-800">Painel de Demandas</h2>
-                    <span id="contador" class="bg-slate-200 text-slate-600 text-xs font-bold px-3 py-1 rounded-full">0</span>
+                <div class="flex justify-between items-center mb-4 px-2">
+                    <h2 class="font-bold text-lg">Pedidos na Fila</h2>
+                    <button onclick="carregarDados()" class="text-[10px] uppercase font-black text-stone-400">Atualizar ↻</button>
                 </div>
                 <div id="lista-demandas" class="grid gap-4"></div>
             </div>
@@ -156,85 +130,92 @@
 
         async function carregarDados() {
             const lista = document.getElementById('lista-demandas');
-            const { data, error } = await meuSupabase.from('postagens').select('*').order('created_at', { ascending: false });
+            const { data } = await meuSupabase.from('postagens').select('*').order('created_at', { ascending: false });
             if (data) {
-                document.getElementById('contador').innerText = data.length;
                 lista.innerHTML = data.map(item => {
-                    const parts = item.descricao.split(' | ');
-                    const pastoral = parts[0] || 'N/A';
-                    const responsavel = parts[1] || 'N/A';
-                    const tel = parts[2] || 'N/A';
-                    const texto = parts.slice(3).join(' | ') || item.descricao;
-
+                    const p = item.descricao.split(' | ');
+                    // Pastoral [0], Nome [1], Tel [2], Desc [3], Link Pedido [4], Link Arte Final [5]
                     return `
                     <div class="bg-white p-6 rounded-2xl shadow-sm border-l-8 ${item.status === 'Aprovado' ? 'border-green-500' : 'border-amber-500'}">
-                        <div class="flex justify-between items-start mb-3">
+                        <div class="flex justify-between items-start mb-2">
                             <div>
-                                <p class="text-[10px] font-black uppercase text-amber-600 tracking-tight">${pastoral}</p>
-                                <h3 class="font-bold text-slate-800 leading-tight">${item.titulo}</h3>
-                                <p class="text-[11px] text-slate-700 font-bold mt-1 uppercase">👤 ${responsavel}</p>
-                                <p class="text-[10px] text-slate-400 font-medium italic mt-0.5">📞 ${tel}</p>
+                                <p class="text-[10px] font-bold text-amber-600 uppercase">${p[0] || 'PASTORAL'}</p>
+                                <h3 class="font-bold text-slate-800">${item.titulo}</h3>
+                                <p class="text-[10px] text-slate-500">Por: <b>${p[1] || 'N/A'}</b></p>
                             </div>
                             <span class="text-[9px] bg-slate-100 px-2 py-1 rounded font-bold uppercase">${item.status}</span>
                         </div>
-                        <p class="text-slate-500 text-xs mb-4 mt-2 bg-slate-50 p-3 rounded-lg border border-slate-100">${texto}</p>
-                        <div class="flex justify-between items-center pt-4 border-t border-slate-50">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">PRAZO: ${item.data_prazo ? item.data_prazo.split('-').reverse().join('/') : 'A definir'}</span>
-                            <div class="flex gap-4">
-                                ${item.status !== 'Aprovado' ? `<button onclick="status('${item.id}', 'Aprovado')" class="text-green-600 font-bold text-[10px] uppercase hover:underline">Aprovar</button>` : ''}
-                                <button onclick="deletar('${item.id}')" class="text-red-400 font-bold text-[10px] uppercase hover:underline">Excluir</button>
+                        <p class="text-xs text-slate-600 bg-slate-50 p-3 rounded-lg my-3 border border-slate-100">${p[3] || item.descricao}</p>
+                        
+                        ${item.status !== 'Aprovado' ? `
+                            <div class="mt-4 p-3 bg-stone-50 rounded-xl border border-dashed border-stone-200">
+                                <label class="text-[9px] font-black uppercase text-stone-400 block mb-1">Link da Arte Finalizada (Canva/Drive):</label>
+                                <div class="flex gap-2">
+                                    <input type="text" id="link-final-${item.id}" placeholder="Cole o link da arte aqui..." class="flex-1 p-2 text-xs border rounded-lg outline-none focus:ring-1 focus:ring-green-500">
+                                    <button onclick="finalizar('${item.id}', '${p[1]}', '${p[2]}', '${item.titulo}')" class="bg-green-600 text-white font-bold text-[10px] px-4 py-2 rounded-lg uppercase">
+                                        Enviar Zap
+                                    </button>
+                                </div>
                             </div>
+                        ` : `
+                            <div class="mt-2 p-2 bg-green-50 rounded-lg text-[10px] text-green-700 truncate">
+                                <b>Arte Final:</b> <a href="${p[5]}" target="_blank" class="underline">${p[5] || 'Sem link'}</a>
+                            </div>
+                        `}
+
+                        <div class="flex justify-between items-center pt-4 border-t border-slate-50 mt-4">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">DATA: ${item.data_prazo ? item.data_prazo.split('-').reverse().join('/') : '--'}</span>
+                            <button onclick="deletar('${item.id}')" class="text-red-300 hover:text-red-500 font-bold text-[9px] uppercase transition-colors">Excluir Pedido</button>
                         </div>
                     </div>
                 `}).join('');
             }
         }
 
-        async function cadastrarPostagem() {
+        async function enviarPedido() {
             const btn = document.getElementById('btn-salvar');
-            const past = document.getElementById('solicitante-pastoral').value;
-            const nome = document.getElementById('solicitante-nome').value;
-            const tel = document.getElementById('solicitante-tel').value;
-            const tipo = document.getElementById('novo-titulo').value;
-            const desc = document.getElementById('nova-descricao').value;
-            const prazo = document.getElementById('novo-prazo').value;
+            const past = document.getElementById('sol-pastoral').value;
+            const nome = document.getElementById('sol-nome').value;
+            const tel = document.getElementById('sol-tel').value;
+            const tipo = document.getElementById('sol-tipo').value;
+            const desc = document.getElementById('sol-desc').value;
+            const link = document.getElementById('sol-link').value;
+            const dataP = document.getElementById('sol-prazo').value;
 
-            if (!past || !nome || !tipo) return alert("Por favor, preencha a Pastoral, seu Nome e o Tipo de Solicitação!");
-            
-            btn.innerText = "ENVIANDO SOLICITAÇÃO...";
-            btn.disabled = true;
+            if (!past || !nome || !tel || !tipo) return alert("Preencha Pastoral, Nome, WhatsApp e Título!");
 
-            // Formato salvo: PASTORAL | NOME | TELEFONE | DESCRIÇÃO
-            const descricaoUnificada = `${past.toUpperCase()} | ${nome.toUpperCase()} | ${tel} | ${desc}`;
+            btn.innerText = "ENVIANDO..."; btn.disabled = true;
 
-            const { error } = await meuSupabase.from('postagens').insert([{ 
-                titulo: tipo, 
-                descricao: descricaoUnificada, 
-                data_prazo: prazo, 
-                status: 'Pendente' 
-            }]);
+            const descricaoFinal = `${past.toUpperCase()} | ${nome} | ${tel.replace(/\D/g,'')} | ${desc} | ${link} | `;
 
-            if (error) {
-                alert("Erro: " + error.message);
-                btn.disabled = false;
-                btn.innerText = "ENVIAR PARA PRODUÇÃO";
-            } else {
-                alert("Solicitação enviada com sucesso para a PASCOM!");
-                location.reload();
-            }
+            const { error } = await meuSupabase.from('postagens').insert([{ titulo: tipo, descricao: descricaoFinal, data_prazo: dataP, status: 'Pendente' }]);
+
+            if (error) { alert("Erro: " + error.message); btn.disabled = false; }
+            else { alert("Solicitação enviada com sucesso!"); location.reload(); }
         }
 
-        async function status(id, novo) {
-            await meuSupabase.from('postagens').update({ status: novo }).eq('id', id);
+        async function finalizar(id, nome, tel, titulo) {
+            const linkArte = document.getElementById(`link-final-${id}`).value;
+            if (!linkArte) return alert("Por favor, cole o link da arte finalizada para enviar!");
+            
+            if (!confirm("Confirmar conclusão e aviso no WhatsApp?")) return;
+            
+            // Buscar descrição atual para anexar o link da arte no final
+            const { data } = await meuSupabase.from('postagens').select('descricao').eq('id', id).single();
+            const partes = data.descricao.split(' | ');
+            partes[5] = linkArte; // Atualiza o campo de link da arte
+            const novaDescricao = partes.join(' | ');
+
+            await meuSupabase.from('postagens').update({ status: 'Aprovado', descricao: novaDescricao }).eq('id', id);
+            
+            if (tel && tel !== 'undefined') {
+                const msg = window.encodeURIComponent(`Olá ${nome}! 🙏 Aqui é da PASCOM (Paróquia Santo Antônio de Lisboa). Passando para avisar que a sua arte para "${titulo}" está pronta!\n\nVocê pode acessar pelo link abaixo:\n${linkArte}`);
+                window.open(`https://wa.me/55${tel}?text=${msg}`, '_blank');
+            }
             carregarDados();
         }
 
-        async function deletar(id) {
-            if(confirm("Deseja apagar este registro?")) {
-                await meuSupabase.from('postagens').delete().eq('id', id);
-                carregarDados();
-            }
-        }
+        async function deletar(id) { if(confirm("Apagar permanentemente este pedido?")) { await meuSupabase.from('postagens').delete().eq('id', id); carregarDados(); } }
     </script>
 </body>
 </html>
