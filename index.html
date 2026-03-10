@@ -34,13 +34,13 @@
             <div class="card-form p-8 md:p-10">
                 <div class="mb-8 border-b border-slate-100 pb-6">
                     <h2 class="text-2xl font-bold text-slate-800">Solicitar Arte</h2>
-                    <p class="text-slate-500 mt-1">Selecione o tipo de demanda e preencha as informações.</p>
+                    <p class="text-slate-500 mt-1">Preencha os dados abaixo para enviar sua demanda.</p>
                 </div>
 
                 <div class="space-y-6">
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">Sua Pastoral / Movimento / Comunidade</label>
-                        <select id="solicitante-nome" class="input-psal w-full p-4 rounded-xl outline-none cursor-pointer">
+                        <select id="solicitante-pastoral" class="input-psal w-full p-4 rounded-xl outline-none cursor-pointer">
                             <option value="">Selecione...</option>
                             <option>Acólitos e Coroinhas</option>
                             <option>Apostolado da Oração</option>
@@ -74,6 +74,16 @@
                     </div>
 
                     <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Nome do Responsável pelo Pedido</label>
+                        <input type="text" id="solicitante-nome" placeholder="Seu nome completo" class="input-psal w-full p-4 rounded-xl outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Telefone de Contato (WhatsApp)</label>
+                        <input type="tel" id="solicitante-tel" placeholder="(00) 00000-0000" class="input-psal w-full p-4 rounded-xl outline-none">
+                    </div>
+
+                    <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">Tipo de Solicitação</label>
                         <select id="novo-titulo" class="input-psal w-full p-4 rounded-xl outline-none cursor-pointer">
                             <option value="">Selecione...</option>
@@ -85,13 +95,8 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Telefone de Contato (WhatsApp)</label>
-                        <input type="tel" id="solicitante-tel" placeholder="(00) 00000-0000" class="input-psal w-full p-4 rounded-xl outline-none">
-                    </div>
-
-                    <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-2">Descrição e Texto da Arte</label>
-                        <textarea id="nova-descricao" rows="4" placeholder="Descreva os detalhes importantes..." class="input-psal w-full p-4 rounded-xl outline-none"></textarea>
+                        <textarea id="nova-descricao" rows="4" placeholder="Descreva os detalhes importantes que devem conter na arte..." class="input-psal w-full p-4 rounded-xl outline-none"></textarea>
                     </div>
 
                     <div>
@@ -156,23 +161,25 @@
                 document.getElementById('contador').innerText = data.length;
                 lista.innerHTML = data.map(item => {
                     const parts = item.descricao.split(' | ');
-                    const pastoralInfo = parts[0] || 'N/A';
-                    const telInfo = parts[1] || 'N/A';
-                    const descReal = parts.slice(2).join(' | ') || item.descricao;
+                    const pastoral = parts[0] || 'N/A';
+                    const responsavel = parts[1] || 'N/A';
+                    const tel = parts[2] || 'N/A';
+                    const texto = parts.slice(3).join(' | ') || item.descricao;
 
                     return `
                     <div class="bg-white p-6 rounded-2xl shadow-sm border-l-8 ${item.status === 'Aprovado' ? 'border-green-500' : 'border-amber-500'}">
                         <div class="flex justify-between items-start mb-3">
                             <div>
-                                <p class="text-[10px] font-black uppercase text-amber-600 tracking-tight">${pastoralInfo}</p>
+                                <p class="text-[10px] font-black uppercase text-amber-600 tracking-tight">${pastoral}</p>
                                 <h3 class="font-bold text-slate-800 leading-tight">${item.titulo}</h3>
-                                <p class="text-[9px] text-slate-400 font-bold mt-1">📞 CONTATO: ${telInfo}</p>
+                                <p class="text-[11px] text-slate-700 font-bold mt-1 uppercase">👤 ${responsavel}</p>
+                                <p class="text-[10px] text-slate-400 font-medium italic mt-0.5">📞 ${tel}</p>
                             </div>
                             <span class="text-[9px] bg-slate-100 px-2 py-1 rounded font-bold uppercase">${item.status}</span>
                         </div>
-                        <p class="text-slate-500 text-xs mb-4 mt-2">${descReal}</p>
+                        <p class="text-slate-500 text-xs mb-4 mt-2 bg-slate-50 p-3 rounded-lg border border-slate-100">${texto}</p>
                         <div class="flex justify-between items-center pt-4 border-t border-slate-50">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">PRAZO: ${item.data_prazo ? item.data_prazo.split('-').reverse().join('/') : 'A definir'}</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">PRAZO: ${item.data_prazo ? item.data_prazo.split('-').reverse().join('/') : 'A definir'}</span>
                             <div class="flex gap-4">
                                 ${item.status !== 'Aprovado' ? `<button onclick="status('${item.id}', 'Aprovado')" class="text-green-600 font-bold text-[10px] uppercase hover:underline">Aprovar</button>` : ''}
                                 <button onclick="deletar('${item.id}')" class="text-red-400 font-bold text-[10px] uppercase hover:underline">Excluir</button>
@@ -185,23 +192,25 @@
 
         async function cadastrarPostagem() {
             const btn = document.getElementById('btn-salvar');
-            const t = document.getElementById('novo-titulo').value;
-            const d = document.getElementById('nova-descricao').value;
-            const p = document.getElementById('novo-prazo').value;
-            const s = document.getElementById('solicitante-nome').value;
+            const past = document.getElementById('solicitante-pastoral').value;
+            const nome = document.getElementById('solicitante-nome').value;
             const tel = document.getElementById('solicitante-tel').value;
+            const tipo = document.getElementById('novo-titulo').value;
+            const desc = document.getElementById('nova-descricao').value;
+            const prazo = document.getElementById('novo-prazo').value;
 
-            if (!t || !s) return alert("Por favor, preencha todos os campos obrigatórios!");
+            if (!past || !nome || !tipo) return alert("Por favor, preencha a Pastoral, seu Nome e o Tipo de Solicitação!");
             
             btn.innerText = "ENVIANDO SOLICITAÇÃO...";
             btn.disabled = true;
 
-            const descricaoCompleta = `${s.toUpperCase()} | ${tel} | ${d}`;
+            // Formato salvo: PASTORAL | NOME | TELEFONE | DESCRIÇÃO
+            const descricaoUnificada = `${past.toUpperCase()} | ${nome.toUpperCase()} | ${tel} | ${desc}`;
 
             const { error } = await meuSupabase.from('postagens').insert([{ 
-                titulo: t, 
-                descricao: descricaoCompleta, 
-                data_prazo: p, 
+                titulo: tipo, 
+                descricao: descricaoUnificada, 
+                data_prazo: prazo, 
                 status: 'Pendente' 
             }]);
 
@@ -210,7 +219,7 @@
                 btn.disabled = false;
                 btn.innerText = "ENVIAR PARA PRODUÇÃO";
             } else {
-                alert("Solicitação enviada com sucesso!");
+                alert("Solicitação enviada com sucesso para a PASCOM!");
                 location.reload();
             }
         }
